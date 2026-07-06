@@ -358,6 +358,84 @@
   .swatch.water{ background: radial-gradient(circle at 70% 20%, rgba(127,212,255,0.28), rgba(47,122,154,0.08) 55%, #060a0b 100%); }
   .swatch.night{ background: radial-gradient(circle at 70% 20%, rgba(127,212,138,0.22), rgba(60,90,64,0.08) 55%, #060906 100%); }
 
+  /* swatches are now buttons — reset native button chrome while keeping the look above */
+  button.swatch{
+    font: inherit; color: var(--ink); text-align: left; width: 100%;
+    border: 1px solid var(--line); outline: none;
+    transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.25s ease;
+  }
+  .swatch:hover{ transform: translateY(-2px); }
+  .swatch.active{ border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset, 0 0 26px -6px var(--accent); }
+  .swatch .hint{
+    margin-left: auto; opacity: 0.55; font-size: 0.62rem; letter-spacing: 0.15em;
+  }
+
+  /* ---------- reveal panel: head + description, triggered by swatch click ---------- */
+  .reveal-panel{
+    margin-top: 1.6rem;
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(255,255,255,0.025), transparent);
+    padding: 2.4rem 2.2rem;
+    position: relative;
+  }
+  .reveal-panel::before{
+    content: "ЛИЧНОЕ ДЕЛО";
+    position:absolute; top:-0.75em; left: 2rem;
+    background: var(--bg); padding: 0 0.6em;
+    font-family:'Space Mono',monospace; font-size: 0.7rem; letter-spacing: 0.3em; color: var(--accent);
+  }
+  .reveal-content{ display:none; }
+  .reveal-content.active{
+    display:grid; grid-template-columns: 260px 1fr; gap: 2.2rem; align-items:start;
+    animation: fadein 0.6s ease;
+  }
+  .reveal-img-wrap{ position:relative; text-align:center; }
+  .reveal-img{
+    width:100%; max-width: 260px; height:auto; display:inline-block;
+    filter: drop-shadow(0 0 22px var(--accent)) drop-shadow(0 0 44px var(--accent-dim));
+    animation: breathe-glow 4.6s ease-in-out infinite;
+  }
+  .reveal-name{
+    font-family:'Cinzel', serif; font-size: 1.7rem; letter-spacing: 0.08em;
+    color: var(--accent); margin-bottom: 1rem;
+    animation: flicker 5s ease-in-out infinite;
+  }
+  .reveal-field{ margin-bottom: 1.1rem; }
+  .reveal-field .k{
+    font-family:'Space Mono', monospace; font-size: 0.72rem;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--accent); display:block; margin-bottom: 0.4rem;
+  }
+  .reveal-field .v{ color: var(--ink); font-size: 1.05rem; }
+  .reveal-quote{
+    margin-top: 1rem; padding-top: 1.2rem; border-top: 1px dashed var(--line);
+    font-style: italic; font-size: 1.28rem; color: #efe9de;
+    animation: flicker 6s ease-in-out infinite;
+  }
+  .reveal-atmo{
+    margin-top: 1.5rem; height: 120px; border: 1px solid var(--line);
+    position: relative; overflow:hidden;
+  }
+  .reveal-atmo.fire{
+    background:
+      radial-gradient(ellipse 70% 60% at 30% 100%, rgba(255,122,61,0.55), transparent 65%),
+      linear-gradient(180deg, #1c0a05 0%, #050302 100%);
+  }
+  .reveal-atmo.water{
+    background:
+      radial-gradient(ellipse 70% 60% at 70% 15%, rgba(127,212,255,0.4), transparent 65%),
+      linear-gradient(180deg, #04141c 0%, #01070a 100%);
+  }
+  .reveal-atmo.night{
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 100%, rgba(127,212,138,0.35), transparent 65%),
+      linear-gradient(180deg, #061a08 0%, #020602 100%);
+  }
+  @media (max-width: 700px){
+    .reveal-content.active{ grid-template-columns: 1fr; }
+    .reveal-img{ max-width: 200px; }
+  }
+
   /* ---------- archive records ---------- */
   #records{ background: var(--bg-soft); text-align:center; }
   .record{
@@ -488,7 +566,7 @@
             fill="none" stroke="var(--accent)" stroke-width="1.6" opacity="0.9"/>
     </svg>
     <h1>Эхо трёх душ</h1>
-    <p class="tagline">«три силы. три голоса. одно сознание.»</p>
+    <p class="tagline">«три силы. три голоса. одно сознание»</p>
     <a href="#legend" class="btn">Открыть архив</a>
   </div>
   <div class="scroll-cue"></div>
@@ -501,9 +579,9 @@
     <span class="eyebrow">Легенда</span>
     <h2 style="font-size: clamp(1.6rem,3vw,2.2rem); margin-bottom:2rem;">Краткая история появления Цербера</h2>
     <div class="legend-text">
-      <p><span class="cap">Происхождение.</span> Задолго до того, как у него появилось имя, в землях семьи Hell yeah жили три духа — порознь, каждый в своей стихии. Один дышал огнём разрушенных очагов, другой — тишиной глубоких вод, третий — тьмой леса, где не ступала нога чужака. Они не знали друг о друге и не искали друг друга.</p>
-      <p><span class="cap">Объединение трёх духов.</span> Когда дом Hell yeah оказался на краю гибели, три духа откликнулись на один и тот же зов — не сговариваясь, но как единое эхо. Их сущности сплелись в одну плоть, три головы под одной тенью: гнев, память и ночь, соединённые общим дыханием.</p>
-      <p><span class="cap">Становление хранителем.</span> С того часа он больше не расходится на три пути. Он не охраняет врата дома — он охраняет тех, кто носит его имя. Три голоса, одно сознание, одна верность.</p>
+      <p><span class="cap">Три сущности.</span> В древнюю эпоху первозданного хаоса существовали три раздельные сущности: неукротимая ярость, ледяной разум и чистейшая преданность. По отдельности каждый был могуч, но обречён на внутренний разлад.</p>
+      <p><span class="cap">Слияние.</span> Однако вселенная не терпит хаоса, и со временем их вибрации совпали, слившись в единый резонанс. Так родился Цербер — не страж мёртвых, как гласят предания, а живое воплощение трёх начал: вспыльчивый Игнис, холодный разумом Аркес и чистый душой Нокс.</p>
+      <p><span class="cap">Предназначение.</span> Цербер не просто страж — он объединяет тех, кто не просто готов встать за семью, но и склонит голову в её благо, за семью Hell Yeah.</p>
     </div>
   </div>
 </section>
@@ -591,9 +669,47 @@
         <div class="label">Эстетика — символ Трикефала</div>
       </div>
       <div class="swatchrow" style="grid-column: 1 / -1;">
-        <div class="swatch fire">Игнис — огонь</div>
-        <div class="swatch water">Аркес — глубина</div>
-        <div class="swatch night">Нокс — тень</div>
+        <button type="button" class="swatch fire active" data-reveal="ignis">Игнис — огонь</button>
+        <button type="button" class="swatch water" data-reveal="arkes">Аркес — глубина</button>
+        <button type="button" class="swatch night" data-reveal="noks">Нокс — тень</button>
+      </div>
+
+      <div class="reveal-panel" style="grid-column: 1 / -1;">
+        <div class="reveal-content active" data-panel="ignis">
+          <div class="reveal-img-wrap"><img class="reveal-img" src="ignis-head.png" alt="Игнис"></div>
+          <div>
+            <div class="reveal-name">Игнис</div>
+            <div class="reveal-field"><span class="k">Характер</span><span class="v">Вспыльчивый и безжалостный — первым бросается вперёд, не зная сомнений.</span></div>
+            <div class="reveal-field"><span class="k">Роль</span><span class="v">Голос гнева. Первым чувствует угрозу и первым отвечает на неё.</span></div>
+            <div class="reveal-field"><span class="k">Особенности</span><span class="v">Дыхание обжигает воздух, глаза — как тлеющие угли, никогда не смыкает их.</span></div>
+            <div class="reveal-quote">«Пепел помнит того, кто зажёг огонь.»</div>
+            <div class="reveal-atmo fire"></div>
+          </div>
+        </div>
+
+        <div class="reveal-content" data-panel="arkes">
+          <div class="reveal-img-wrap"><img class="reveal-img" src="arkes-head.png" alt="Аркес"></div>
+          <div>
+            <div class="reveal-name">Аркес</div>
+            <div class="reveal-field"><span class="k">Характер</span><span class="v">Аркес — воплощение ледяного абсолюта разума. Его не вывести из себя провокацией, не сбить с толку хаосом. Аркес мыслит наперёд, каждый шаг просчитан, каждый жест несёт смысл, каждое слово взвешено. Он не знает страсти, но знает цель. И если Игнис — огонь, то Аркес — лёд, в котором этот огонь заключён и направлен.</span></div>
+            <div class="reveal-field"><span class="k">Роль</span><span class="v">Мозг и стратег, способный направить силы в нужное русло и вовремя оказать защиту.</span></div>
+            <div class="reveal-field"><span class="k">Особенности</span><span class="v">Он наблюдает, анализирует, выстраивает схемы и только потом действует. Он не терпит импровизации и слабости. В бою он не наносит ударов первым — он ждёт, когда противник раскроется, и наносит один, но идеальный удар.</span></div>
+            <div class="reveal-quote">«Хаос — это всего лишь порядок, который я ещё не расшифровал.»</div>
+            <div class="reveal-atmo water"></div>
+          </div>
+        </div>
+
+        <div class="reveal-content" data-panel="noks">
+          <div class="reveal-img-wrap"><img class="reveal-img" src="noks-head.png" alt="Нокс"></div>
+          <div>
+            <div class="reveal-name">Нокс</div>
+            <div class="reveal-field"><span class="k">Характер</span><span class="v">Он — воплощение сакральной привязанности и нерушимой верности. Нокс — тихая гавань, но при этом абсолютная сила, которая держит троицу в едином целом. Он служит не просто нитью, а канатом между головами. Он не ищет конфликтов, но никогда не отступает и не оставит остальных.</span></div>
+            <div class="reveal-field"><span class="k">Роль</span><span class="v">Невидимая скрепа, без которой троица распалась бы на три враждующих осколка. Его задача — сохранять единство, гасить внутренние конфликты и держать гармонию.</span></div>
+            <div class="reveal-field"><span class="k">Особенности</span><span class="v">Нокс обладает уникальным даром — он чувствует. И даже в самые опасные моменты он не боится тушить огонь в лицах других.</span></div>
+            <div class="reveal-quote">«Огонь и лёд могут сражаться вечность, но я та тишина, в которой они мирятся.»</div>
+            <div class="reveal-atmo night"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -607,6 +723,7 @@
     <h2 style="font-size: clamp(1.6rem,3vw,2.2rem); margin-bottom:2.6rem;">Отрывки, сохранённые архивом</h2>
     <p class="record">некоторые слышат вой раньше, чем замечают тени.</p>
     <p class="record">он не охраняет врата. он охраняет своих.</p>
+    <p class="record">это три грани одного долга, который не знает сна.</p>
   </div>
 </section>
 
@@ -631,6 +748,27 @@
         night: ['--night-glow', '--night']
       };
       const [glowVar, dimVar] = map[target];
+      root.style.setProperty('--accent', getComputedStyle(root).getPropertyValue(glowVar));
+      root.style.setProperty('--accent-dim', getComputedStyle(root).getPropertyValue(dimVar));
+    });
+  });
+
+  // gallery swatch → reveal head + description
+  const swatchBtns = document.querySelectorAll('.swatch[data-reveal]');
+  const revealContents = document.querySelectorAll('.reveal-content');
+  const accentMap = {
+    ignis: ['--fire-glow', '--fire'],
+    arkes: ['--water-glow', '--water'],
+    noks:  ['--night-glow', '--night']
+  };
+  swatchBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.reveal;
+      swatchBtns.forEach(b => b.classList.toggle('active', b === btn));
+      revealContents.forEach(c => c.classList.toggle('active', c.dataset.panel === target));
+
+      const root = document.documentElement;
+      const [glowVar, dimVar] = accentMap[target];
       root.style.setProperty('--accent', getComputedStyle(root).getPropertyValue(glowVar));
       root.style.setProperty('--accent-dim', getComputedStyle(root).getPropertyValue(dimVar));
     });
