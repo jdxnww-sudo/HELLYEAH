@@ -73,12 +73,75 @@
     100%{ transform: translate(2%, -3%) scale(1.06); }
   }
 
+  /* smoke variant tinted with the current head's accent colour — recolours live on tab switch */
+  .smoke-accent{
+    position: absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+  }
+  .smoke-accent span{
+    position:absolute; width: 46vw; height: 46vw; max-width: 420px; max-height: 420px;
+    border-radius: 50%; filter: blur(70px);
+    background: var(--accent); opacity: 0.10;
+    animation: drift 20s ease-in-out infinite alternate;
+    transition: background 0.6s ease;
+  }
+  .smoke-accent span:nth-child(1){ top: -12%; left: -8%; }
+  .smoke-accent span:nth-child(2){
+    bottom: -16%; right: -10%; opacity: 0.08;
+    animation-duration: 27s; animation-direction: alternate-reverse;
+  }
+
+  /* soft rising embers / motes — colour follows --accent, works in any section */
+  .particles{ position:absolute; inset:0; z-index:1; overflow:hidden; pointer-events:none; }
+  .particles span{
+    position:absolute; bottom:-12px; left: var(--x, 50%);
+    width: 3px; height: 3px; border-radius:50%;
+    background: var(--accent);
+    box-shadow: 0 0 6px 2px var(--accent);
+    opacity: 0;
+    animation: ember var(--dur, 12s) linear infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes ember{
+    0%{ transform: translate(0,0); opacity:0; }
+    8%{ opacity: 0.75; }
+    75%{ opacity: 0.35; }
+    100%{ transform: translate(var(--drift, 24px), -78vh); opacity:0; }
+  }
+  .particles span:nth-child(1){ --x:6%;  --dur:14s; --delay:-1s;  --drift:18px; }
+  .particles span:nth-child(2){ --x:16%; --dur:17s; --delay:-6s;  --drift:-22px; }
+  .particles span:nth-child(3){ --x:27%; --dur:12s; --delay:-3s;  --drift:14px; }
+  .particles span:nth-child(4){ --x:38%; --dur:19s; --delay:-9s;  --drift:-16px; }
+  .particles span:nth-child(5){ --x:49%; --dur:15s; --delay:-2s;  --drift:20px; }
+  .particles span:nth-child(6){ --x:60%; --dur:21s; --delay:-11s; --drift:-24px; }
+  .particles span:nth-child(7){ --x:71%; --dur:13s; --delay:-5s;  --drift:16px; }
+  .particles span:nth-child(8){ --x:82%; --dur:18s; --delay:-8s;  --drift:-18px; }
+  .particles span:nth-child(9){ --x:92%; --dur:16s; --delay:-4s;  --drift:22px; }
+  .particles span:nth-child(10){ --x:34%; --dur:23s; --delay:-13s; --drift:-14px; }
+
+  /* subtle flicker for torch/glow-lit elements */
+  @keyframes flicker{
+    0%, 100%{ opacity: 1; }
+    8%{ opacity: 0.82; }
+    12%{ opacity: 1; }
+    21%{ opacity: 0.9; }
+    29%{ opacity: 1; }
+    54%{ opacity: 0.88; }
+    61%{ opacity: 1; }
+    77%{ opacity: 0.93; }
+  }
+  @keyframes breathe-glow{
+    0%, 100%{ filter: drop-shadow(0 0 4px var(--accent)) drop-shadow(0 0 0 transparent); }
+    50%{ filter: drop-shadow(0 0 14px var(--accent)) drop-shadow(0 0 22px var(--accent-dim)); }
+  }
+
   /* ---------- chain divider ---------- */
   .chain-rule{
     display:flex; align-items:center; justify-content:center; gap:10px;
     padding: 2.2rem 0;
     color: var(--gold); opacity: 0.6;
     font-size: 1.1rem; letter-spacing: 0.3em;
+    animation: flicker 6.5s ease-in-out infinite;
+    text-shadow: 0 0 10px rgba(156,138,95,0.35);
   }
   .chain-rule::before, .chain-rule::after{
     content:""; flex:1; height:1px;
@@ -96,6 +159,7 @@
     color: var(--accent);
     margin-bottom: 1rem;
     display:block;
+    animation: flicker 5.5s ease-in-out infinite;
   }
 
   /* ---------- hero ---------- */
@@ -119,6 +183,7 @@
   .hero .sigil{
     width: 64px; height: 64px; margin: 0 auto 1.6rem;
     opacity: 0.9;
+    animation: breathe-glow 4.2s ease-in-out infinite;
   }
   .hero h1{
     font-size: clamp(2.4rem, 6vw, 4.4rem);
@@ -210,7 +275,7 @@
   .dossier-row:last-child{ border-bottom:none; }
   .dossier-row .k{ color: var(--ink-dim); min-width: 130px; text-transform: lowercase; }
   .dossier-row .v{ color: var(--ink); }
-  .dossier-row .v.accentv{ color: var(--accent); }
+  .dossier-row .v.accentv{ color: var(--accent); animation: flicker 5s ease-in-out infinite; }
 
   /* ---------- three heads ---------- */
   #heads{ background: var(--bg-soft); }
@@ -254,6 +319,7 @@
   .head-field.quote{ grid-column: 1 / -1; margin-top: 0.6rem; padding-top: 1.4rem; border-top: 1px dashed var(--line); }
   .head-field.quote .v{
     font-style: italic; font-size: 1.3rem; color: #efe9de;
+    animation: flicker 6s ease-in-out infinite;
   }
 
   /* ---------- gallery ---------- */
@@ -305,7 +371,12 @@
     padding: 0 1rem;
   }
   .record:last-child{ margin-bottom:0; }
-  .record::before, .record::after{ color: var(--accent); font-family: 'Cinzel', serif; font-style:normal; }
+  .record::before, .record::after{
+    color: var(--accent); font-family: 'Cinzel', serif; font-style:normal;
+    animation: flicker 4.8s ease-in-out infinite;
+  }
+  .record::before{ content: "« "; }
+  .record::after{ content: " »"; }
 
   footer{
     padding: 3rem 1.5rem;
@@ -406,6 +477,10 @@
 <!-- ================= HERO ================= -->
 <section class="hero" id="top">
   <div class="moon-glow"></div>
+  <div class="particles" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
   <div class="hero-inner">
     <svg class="sigil" viewBox="0 0 100 100" fill="none">
       <circle cx="50" cy="50" r="46" stroke="var(--gold)" stroke-width="1.4" opacity="0.7"/>
@@ -437,6 +512,7 @@
 
 <!-- ================= DOSSIER ================= -->
 <section id="dossier">
+  <div class="smoke"></div>
   <div class="wrap reveal">
     <span class="eyebrow">Досье</span>
     <h2 style="font-size: clamp(1.6rem,3vw,2.2rem); margin-bottom:2rem;">Личное дело хранителя</h2>
@@ -452,6 +528,11 @@
 
 <!-- ================= THREE HEADS ================= -->
 <section id="heads">
+  <div class="smoke-accent" aria-hidden="true"><span></span><span></span></div>
+  <div class="particles" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span>
+  </div>
   <div class="wrap reveal">
     <span class="eyebrow">Три головы</span>
     <h2 style="font-size: clamp(1.6rem,3vw,2.2rem); margin-bottom:2rem;">Голоса одного тела</h2>
@@ -495,6 +576,7 @@
 
 <!-- ================= GALLERY ================= -->
 <section id="gallery">
+  <div class="smoke"></div>
   <div class="wrap reveal">
     <span class="eyebrow">Галерея</span>
     <h2 style="font-size: clamp(1.6rem,3vw,2.2rem); margin-bottom:2rem;">Эстетика. Карточки. Арты.</h2>
@@ -519,6 +601,7 @@
 
 <!-- ================= ARCHIVE RECORDS ================= -->
 <section id="records">
+  <div class="smoke"></div>
   <div class="wrap reveal">
     <span class="eyebrow">Архивные записи</span>
     <h2 style="font-size: clamp(1.6rem,3vw,2.2rem); margin-bottom:2.6rem;">Отрывки, сохранённые архивом</h2>
